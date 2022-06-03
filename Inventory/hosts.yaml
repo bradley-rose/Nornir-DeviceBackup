@@ -1,0 +1,12 @@
+---
+asa:
+  hostname: '192.168.0.1'
+  groups:
+    - 'ASA'
+    - 'ASA2130'
+
+asa2:
+  hostname: '192.168.0.2'
+  groups:
+    - 'ASA'
+    - 'ASA2130'

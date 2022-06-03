@@ -1,0 +1,4 @@
+---
+username: '<Username in plaintext, or encrypted username to be decrypted by Fernet.>'
+password: '<Password in plaintext, or encrypted password to be decrypted by Fernet.>'
+port: 22

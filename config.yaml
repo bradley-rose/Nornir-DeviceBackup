@@ -1,0 +1,9 @@
+---
+inventory:
+  plugin: SimpleInventory
+  options:
+    host_file: "Inventory/hosts.yaml"
+    group_file: "Inventory/groups.yaml"
+    defaults_file: "Inventory/defaults.yaml"
+logging:
+  enabled: False

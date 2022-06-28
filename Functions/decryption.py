@@ -1,7 +1,7 @@
 from cryptography.fernet import Fernet
 
 def decryptCredentials(devices):
-    with open("Hosts Encryption Key.txt", "rb") as file:
+    with open("Functions\\Hosts Encryption Key.txt", "rb") as file:
         key = file.read()
     cipher = Fernet(key)
     for device in devices.inventory.hosts.values():

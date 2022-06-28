@@ -1,5 +1,5 @@
 ---
-ASA: 
+Switch: {}
+Router: {}
+Firewall: 
   platform: cisco_asa
-  
-ASA2130: {}

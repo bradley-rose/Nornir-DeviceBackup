@@ -1,12 +1,17 @@
 ---
-asa:
-  hostname: '192.168.0.1'
+firewallA:
+  hostname: 10.69.69.69
   groups:
-    - 'ASA'
-    - 'ASA2130'
+    - 'Firewall'
+  username: 'encryptedUsername'
+  password: 'encryptedPassword'
 
-asa2:
-  hostname: '192.168.0.2'
+switchA:
   groups:
-    - 'ASA'
-    - 'ASA2130'
+  - Switch
+  hostname: 192.168.69.69
+
+routerA:
+  groups:
+  - Router
+  hostname: 172.16.69.69

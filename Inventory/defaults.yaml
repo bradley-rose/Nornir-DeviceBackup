@@ -1,0 +1,5 @@
+---
+username: 'encryptedUsername'
+password: 'encryptedPassword'
+port: 22
+platform: cisco_ios

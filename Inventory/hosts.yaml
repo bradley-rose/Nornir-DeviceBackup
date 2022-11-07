@@ -1,0 +1,19 @@
+host1::
+  groups:
+  - Firewall
+  hostname: 10.69.42.01
+host2:
+  groups:
+  - Switch
+  hostname: 10.69.42.02
+host3:
+  groups:
+  - Router
+  hostname: 10.69.42.03
+host4:
+  groups:
+  - Firewall
+  - ASA_Context
+  hostname: 10.69.42.04
+  password: encryptedPassword
+  username: encryptedUsername

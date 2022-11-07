@@ -1,0 +1,8 @@
+---
+host4:
+  groups:
+  - Firewall
+  - ASA_Context
+  hostname: 10.69.42.04
+  password: encryptedPassword
+  username: encryptedUsername

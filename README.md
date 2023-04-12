@@ -10,30 +10,27 @@
 
 ## File Structure
 ```
-Device Backup_Linux
-│   README.md
-│   README.html
-│   config.yaml  
-│   deviceBackup.py 
-│   ...    
-│
-└───Inventory
-│   │   staticHosts.yaml
-│   │   hosts.yaml
-│   │   groups.yaml
-│   │   defaults.yaml 
-│   │   
-└───Functions
-│   │   __init__.py
-│   │   decryption.py
-│   │   Hosts Encryption Key.txt 
-│   │   obtainDynamicHosts.py
-│   │   phpipam_API.py
-│   │   sendEmail.py
+Network Device Backup
+├── Inventory
+│   ├── defaults.py
+│   ├── groups.py
+│   ├── hosts.py
+│   └── staticHosts.py
+├── Functions
+│   ├── __init__.py
+│   ├── decryption.py
+│   ├── deviceBackupLog.txt
+│   ├── Hosts Encryption Key.txt
+│   └── obtainDynamicHosts.py
+├── config.yaml
+├── deviceBackup.py 
+├── requirements.txt
+├── README.md 
+└── .gitignore
 ```
 
 ## General Information
-This "Device Backup" script is built using the "Nornir" framework. This is similar to Ansible, but it's built on top of Python for some added flexibility. For more information on how this works, including the inventory and variable inheritance structure, [here's a link to the developer's official documentation](https://nornir.readthedocs.io/en/latest/). I wouldn't recommend this for *light* reading as it's quite complicated unless you know Python and have time to dissect this code against the documentation.
+This "Device Backup" script is built using [Nornir](https://nornir.readthedocs.io/en/latest/) for the automation framework and [Netbox](https://docs.netbox.dev/en/stable/) as the inventory system.
 
 # Usage Instructions for Device Backups
 `deviceBackup.py` should be called from a cronjob on a Linux server that's executed on a regular interval.
@@ -44,28 +41,24 @@ This "Device Backup" script is built using the "Nornir" framework. This is simil
 
 ## What happens once `deviceBackup.py` is called?
 ### Summary
-1. Identifies all hosts (statically defined, DNA Centre inventory, IPAM inventory)
+1. Identifies all hosts (statically defined, Netbox)
 2. SSH's into each device, performs a `show run`
 3. Outputs the result to a text file on a remote directory
 4. Performs a `git commit` to version control the directory.
 
 ### Details
-1. Calls upon `Functions/obtainDynamicHosts.py`, which obtains hosts from a variety of locations and formats these findings into a YAML-formatted file for the rest of the script to rely upon:
+1. Calls upon `Functions/obtainDynamicHosts.py`, which obtains hosts from Netbox and formats the hosts into a YAML-formatted file for the rest of the script to rely upon:
    1. Reads in `Inventory/staticHosts.yaml`. These are statically defined hosts that require special handling. These hosts and their associated properties take the highest priority. Reasons to include a host in the static file may include:
       1. Non-standard credentials (local auth)
       2. Non-standard device sub-type (Switch (IOS/IOS-XE vs. Nexus Switch (NXOS))
-   2. Sends a query to DNA Center for a list of all switches, routers, voice gateways, and WLCs within its inventory. 
-      1. If the host is found in the previously obtained `staticHosts.yaml` file, then the static entry takes precedence. 
-   3. Sends a query to phpIPAM for a list of all switches, routers, **firewalls**, voice gateways, and WLCs within its inventory.
-      1. Of note, DNA Centre doesn't have any firewalls within its inventory, and as such, those have been added to the phpIPAM inventory.
-      2. Once again, if the host is found in either of the two previous methods, they take precedence. IPAM is the lowest precedence inventory.
-2. Instantiates the Nornir framework. This reads in the recently created `Inventory/hosts.yaml` file containing the hosts identified in the previous step.
+   2. Calls to Netbox based on what's defined in `obtainDynamicHosts.py`. You, as the user, will have to define this operation as it pertains to your Netbox environment. Have a read through the [Pynetbox readthedocs](https://readthedocs.org/projects/pynetbox/) for some guidance.
+2. Initializes the Nornir framework. This reads in the recently created `Inventory/hosts.yaml` file containing the hosts identified in the previous step.
 3. Decrypts any provided credentials with `Functions/decryption.py` and `Functions/Hosts Encryption Key.txt`.
 4. Log into each device via SSH using the Netmiko framework. 
-   1. Our devices don't have HTTP enabled on them as of yet, so NAPALM and other API-based automation frameworks are out of the picture.
+   1. My devices don't have HTTP enabled on them as of yet, so NAPALM and other API-based automation frameworks are out of the picture.
    2. Netmiko is an automation framework that utilizes SSH for its actions.
 5. Calls a `show run` as appropriate for each type of device.
-6. Outputs the result to a text file at `/mnt/configs/`, which is an SMB/CIFS-mountpoint for the enterprise file store where our configs live.
+6. Outputs the result to a text file at `/mnt/configs/`, which is an SMB/CIFS-mountpoint for the enterprise file store where my configs live.
 7. Performs a `git commit` on all relevant directories to version control the backups.
 
 ## How are credentials provided?

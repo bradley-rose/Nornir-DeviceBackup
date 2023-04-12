@@ -1,0 +1,8 @@
+cryptography
+dnacentersdk
+GitPython
+nornir
+nornir_netmiko
+PyYAML
+requests
+pynetbox

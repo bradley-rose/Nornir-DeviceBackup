@@ -1,11 +1,11 @@
 ---
-ASA2130: {}
-ASA_Context: {}
-Switch: {}
-Router: {}
-Firewall: 
+Context: {}
+ActiveFirewall: {}
+Switches: {}
+Routers: {}
+Firewalls: 
   platform: cisco_asa
 Voice: {}
-Wireless: {}
+WLCs: {}
 Nexus:
   platform: cisco_nxos
